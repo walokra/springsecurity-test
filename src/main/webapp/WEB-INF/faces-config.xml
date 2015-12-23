@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+              version="1.2">
+
+    <application>
+        <message-bundle>resources</message-bundle>
+        <resource-bundle>
+            <base-name>resources</base-name>
+            <var>msgs</var>
+        </resource-bundle>
+        <el-resolver>
+            org.springframework.web.jsf.el.SpringBeanFacesELResolver
+        </el-resolver>
+        <locale-config>
+            <default-locale>en_US</default-locale>
+        </locale-config>
+    </application>
+
+    <managed-bean>
+        <managed-bean-name>helloBean</managed-bean-name>
+        <managed-bean-class>com.ruleoftech.springsectest.web.HelloBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>index</from-outcome>
+            <to-view-id>/index.jspx</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+</faces-config>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-2.5.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<!-- Enable annotation-driven configuration and auto-detection -->
+	<context:annotation-config />
+
+	<context:component-scan base-package="com.ruleoftech.springsectest" />
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <!--<property name="dataSource" ref="dataSource" />-->
+        <property name="persistenceUnitName" value="h2" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+        </property>
+        <property name="jpaProperties">
+            <map>
+                <entry key="connection.driver_class" value="org.h2.Driver"/>
+                <entry key="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
+                <entry key="hibernate.generate_ddl" value="true" />
+                <entry key="hibernate.show_sql" value="true" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+    <!-- Persistence exception translation for Repositories -->
+	<bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+	<!-- this bean must not be lazily initialized if the exporting is to happen -->
+	<bean id="exporter"
+		class="org.springframework.jmx.export.annotation.AnnotationMBeanExporter"
+		lazy-init="false" p:defaultDomain="" p:server-ref="mbeanServer" />
+
+	<bean id="mbeanServer"
+		class="org.springframework.jmx.support.MBeanServerFactoryBean"
+		p:locateExistingServerIfPossible="true" />
+
+</beans>
